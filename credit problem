@@ -1,0 +1,117 @@
+#include <stdio.h>
+#include <cs50.h>
+
+int main(void)
+{ 
+    long number;      
+    long temp_num;
+   
+    do
+    {
+        number = get_long("Enter the Credit Card Number: "); // prompt user
+    } while(number < 0);
+   
+   temp_num = number;
+   int count = 0;
+   
+    while(number > 0)   //gets the number count
+    {  
+        int count1;
+        count1   = number % 10;
+        number   = number / 10;
+        count++;
+    }
+ 
+   if(count != 14 && (count >= 13 && count <= 16)) //condition for validation
+   {
+     int digit[16]={0}; 
+    
+     for(int i = 0; i < count; i++ ) // assigning each digit based on the count/number of digits
+    {
+       digit[i] = temp_num % 10;
+       temp_num   = temp_num / 10;
+    }
+     int sum_num = count / 2;
+     int step[sum_num];
+     int j = 1;
+     
+     for(int i = 0; i < sum_num; i++ ) // multiplying alternate values
+      {
+        step[i] = digit[j] * 2;
+        j = j + 2;
+      }
+     
+      int sum1=0 ;
+      int sum2=0 ;
+      int sub_sum[8];
+      for(int i = 0; i < 8; i++ ) // to add all digits together
+      {
+        int sub1 , sub2;
+        if(step[i] >= 10) // if digit has two places
+        {
+            sub1 = step[i] % 10;
+            step[i] = step[i] / 10;
+            sub2 = step[i] % 10;
+            sub_sum[i] = sub1 + sub2;
+        }
+        else
+        {
+            sub_sum[i] = step[i];
+        }
+      }
+     
+       for(int i = 0; i < 8; i++)
+       {
+         sum1 = sum1 +  sub_sum[i];
+       }
+      
+      int k = 0;
+      for(int i = 0; i < 8; i++) //adding remaining digits
+      {
+        sum2 = digit[k] + sum2 ;
+        k = k+ 2;
+      }
+      
+        int total =0;
+        total = sum1 + sum2;
+
+        if(total % 10 == 0)
+        {
+            bool amex = false, visa = false, visa1 = false, master = false;
+            if(count==13 && digit[15]==4)
+            {
+                printf("VISA\n");
+                visa1 = true;
+            }
+            
+            if(count==16 && digit[15]==4)
+            {
+                printf("VISA\n");
+                visa = true;
+            }
+        
+            if((count==16) && ((digit[15]==5) && (digit[14]==1||digit[14]==2||digit[14]==3||digit[14]==4||digit[14]==5)))
+            {
+                printf("MASTERCARD\n");
+                master = true;
+            }
+            if((count==15) && ((digit[14]==3) && (digit[13]==4||digit[13]==7)))
+            {
+                printf("AMEX\n");
+                amex = true;
+            }
+            if(amex == false && visa == false && visa1== false && master==false)
+            {
+                printf("INVALID\n");
+            }
+        }
+         else
+         {
+             printf("INVALID\n");
+         }
+    }     
+   else
+    {
+        printf("INVALID\n");
+    }
+}
